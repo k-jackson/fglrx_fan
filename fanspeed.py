@@ -2,7 +2,6 @@
 from subprocess import call
 import time
 import subprocess
-from sys import argv
 import shlex
 import daemon
 
@@ -11,17 +10,14 @@ temps = [55,60,64,70,90]
 fanspeeds = [20,35,50,60,80]
 
 def fan_spd(speed_int):
-    global current_fan
+    # shlex.split: outputs command as list of strings
     c_list = shlex.split('aticonfig --pplib-cmd "set fanspeed 0 ' +
             str(speed_int) + '"')
-
     call(c_list)
     current_fan = int(speed_int)
 
 def get_temp():
-    # shlex.split: outputs command as list of strings
     c_list = shlex.split('aticonfig --adapter=0 --od-gettemperature')
-
     output = subprocess.check_output(c_list)
     index = output.find('.00')
     temp = output[index-2:index]
